@@ -17,7 +17,7 @@ const LoginForm = (props) => {
 
     try {
       const res = await fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCnFkm3QUNpHzskB0kG02tbilsUExeKDno",
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCvG0m1K0tSlHR6AVIxny788s0PKVOgmKQ",
         {
           method: "POST",
           body: JSON.stringify({

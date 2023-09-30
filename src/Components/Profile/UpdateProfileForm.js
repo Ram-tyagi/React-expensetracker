@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect,useRef } from "react";
 import { Button, Form } from "react-bootstrap";
 import classes from "./UpdateProfileForm.module.css";
 
@@ -7,6 +7,16 @@ const UpdateProfileForm = (props) => {
   const nameInputRef = useRef();
   const contactInputRef = useRef();
   const locationInputRef = useRef();
+  let emailInputRef = useRef();
+  
+
+  console.log(props.user)
+  useEffect(()=> {
+    if (props.user) {
+        nameInputRef.current.value = props.user.displayName;
+        emailInputRef.current.value = props.user.email;
+      }
+  },[props.user])
 
   const clickUpdateHandler = async (event) => {
       event.preventDefault();
@@ -17,7 +27,7 @@ const UpdateProfileForm = (props) => {
 
     try {
       const res = await fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCnFkm3QUNpHzskB0kG02tbilsUExeKDno",
+        "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCvG0m1K0tSlHR6AVIxny788s0PKVOgmKQ",
         {
           method: "POST",
           body: JSON.stringify({
@@ -48,6 +58,10 @@ const UpdateProfileForm = (props) => {
     <section className={classes.updateForm}>
       <h1>Update profile</h1>
       <Form ref={formRef}>
+      <Form.Group className={classes["mb-3"]}>
+          <Form.Label className={classes.label}>Email</Form.Label>
+          <Form.Control placeholder="Email" ref={emailInputRef} />
+        </Form.Group>
         <Form.Group className={classes["mb-3"]}>
           <Form.Label className={classes.label}>Full Name:</Form.Label>
           <Form.Control placeholder="Full Name" ref={nameInputRef} />
