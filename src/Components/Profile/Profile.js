@@ -1,6 +1,7 @@
-import React, {  useState,useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { Fragment, useState,useContext } from "react";
+import { Link,useNavigate } from "react-router-dom";
 import AuthContext from "../Store/auth-context";
+import { Button } from "react-bootstrap";
 
 
 import classes from "./Profile.module.css";
@@ -10,7 +11,7 @@ const Profile = (props) => {
   const [updateVisible, setUpdateVisible] = useState(false);
   const authCtx = useContext(AuthContext);
   const [userData, setUserData] = useState(null)
-  
+  const navigate = useNavigate()
 
   const updateVisibleHandler = async() => {
     setUpdateVisible(true);
@@ -35,26 +36,37 @@ const Profile = (props) => {
         alert(error);
       }
     };
-   
+    const clickLogoutHandler = () => {
+        authCtx.logout();
+        navigate('/',{replace: true});
+    
+      };
+    
   
   return (
-    <div className={classes.proCon}>
+    <Fragment>
+    <section className={classes.proCon}>
       <div className={classes.header}>
-        <p>Welcome to Expense tracker</p>
-        <span className={classes.incomplete}>
-        {!updateVisible ? (
-            "Your Profile is incomplete. "
-          ) : (
-            <React.Fragment>
-              Your profile <strong>x%</strong> completed.
-            </React.Fragment>
-          )}
-          <Link onClick={updateVisibleHandler}>Complete now</Link>
-        </span>
-
+        <div className={classes.headerDetail}>
+          <p>Welcome to Expense tracker</p>
+          <span className={classes.incomplete}>
+            {!updateVisible ? (
+              "Your Profile is incomplete. "
+            ) : (
+              <React.Fragment>
+                Your profile <strong>x%</strong> completed.
+              </React.Fragment>
+            )}
+            <Link onClick={updateVisibleHandler}>Complete now</Link>
+          </span>
+        </div>
+        <div>
+          <Button variant="danger" onClick={clickLogoutHandler}>Log out</Button>
+        </div>
       </div>
-      {updateVisible && <UpdateProfileForm user={userData}/>}
-    </div>
+    </section>
+    {updateVisible && <UpdateProfileForm user={userData} />}
+  </Fragment>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef,useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import classes from "./SignupForm.module.css";
 
@@ -7,42 +7,78 @@ const SignupForm = (props) => {
   const emailInputRef = useRef();
   const passInputRef = useRef();
   const conPassInputRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
+  const [varifyMail, setVarifymail] = useState(false);
+
 
   const submitHandler = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
 
     const enteredEmail = emailInputRef.current.value;
     const enteredPass = passInputRef.current.value;
     const enteredConPass = conPassInputRef.current.value;
 
     if (enteredPass !== enteredConPass) {
-      alert("Password not matched with Confirm password.");
-    }
-    try {
-      const res = await fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCvG0m1K0tSlHR6AVIxny788s0PKVOgmKQ",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: enteredEmail,
-            password: enteredPass,
-            returnSecureToken: true,
-          }),
-          headers: {
-            "content-type": "application/json",
-          },
+        alert("Password not matched with Confirm password.");
+      }
+      try {
+        const res = await fetch(
+          "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCvG0m1K0tSlHR6AVIxny788s0PKVOgmKQ",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              email: enteredEmail,
+              password: enteredPass,
+              returnSecureToken: true,
+            }),
+            headers: {
+              "content-type": "application/json",
+            },
+          }
+        );
+        
+        const data = await res.json();
+       
+        if (res.ok) {
+          try {
+            const response = await fetch(
+              "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCvG0m1K0tSlHR6AVIxny788s0PKVOgmKQ",
+              {
+                method: "POST",
+                body: JSON.stringify({
+                  requestType: "VERIFY_EMAIL",
+                  idToken: data.idToken,
+                }),
+                headers: {
+                  "content-type": "application/json",
+                },
+              }
+            );
+            if(response.ok){
+              setIsLoading(false);
+              alert("Verification email sent.");
+              setVarifymail(true);
+              setTimeout(() => {
+                  setVarifymail(false)
+              },10000)
+            } else {
+                throw new Error ('Sign Up failed. Try again.')
+            }
+          } catch (error) {
+            alert(error)
+          }
+        } else {
+          throw Error("Authentication Failed");
         }
-      );
-      console.log("Successfully signed up");
-      alert("Successfully signed up")
-      if (!res.ok) {
-        throw Error("Authentication Failed");
+        
+      } catch (error) {
+        alert(error);
+        setIsLoading(false);
       }
       formRef.current.reset();
-    } catch (error) {
-      alert(error);
-    }
-  };
+    };
+
 
   return (
     <div className={classes.signup}>
@@ -77,8 +113,13 @@ const SignupForm = (props) => {
           />
         </Form.Group>
         <Button variant="primary" type="submit" onClick={submitHandler}>
-          Submit
+        {!isLoading ? 'Sign up' : 'Sending request...'}
         </Button>
+        {varifyMail && (
+          <p style={{ margin: "1rem", color: "green" }}>
+            Please varify email. Verfication mail already sent.
+          </p>
+        )}
       </Form>
     </div>
   );
