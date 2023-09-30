@@ -1,7 +1,8 @@
-import React, { useContext,useRef } from "react";
+import React, { useContext,useRef,useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import AuthContext from "./Store/auth-context";
+import ForgotPassForm from "./ForgotpassForm";
 
 
 const LoginForm = (props) => {
@@ -9,6 +10,8 @@ const LoginForm = (props) => {
   const emailInputRef = useRef();
   const passInputRef = useRef();
   const navigate = useNavigate();
+  const [forgotVisible, setForgotVisible] = useState(false);
+
 
   const submitLoginHandle = async (event) => {
     event.preventDefault();
@@ -44,32 +47,44 @@ const LoginForm = (props) => {
       alert(error);
     }
   };
+  const linkClickHandler = () => {
+    setForgotVisible(true);
+  };
 
   return (
-    <div >
-      <h1 style={{font:"bold"}}>Log In</h1>
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            ref={emailInputRef}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            ref={passInputRef}
-            required
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" onClick={submitLoginHandle}>
-          Log in
-        </Button>
-      </Form>
-    </div>
+    <>
+      {forgotVisible ? (
+        <ForgotPassForm onReset={() => setForgotVisible(false)} />
+      ) : (
+        <div >
+          <h1 style={{font:"bold"}}>Log In</h1>
+          <Form>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                ref={emailInputRef}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                ref={passInputRef}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Link onClick={linkClickHandler}>Forgot Password?</Link>
+            </Form.Group>
+            <Button variant="primary" type="submit" onClick={submitLoginHandle}>
+              Log in
+            </Button>
+          </Form>
+        </div>
+      )}
+    </>
   );
 };
 

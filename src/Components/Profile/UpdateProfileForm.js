@@ -12,10 +12,11 @@ const UpdateProfileForm = (props) => {
 
   console.log(props.user)
   useEffect(()=> {
-    if (props.user) {
+    if(props.user.displayName !== undefined){
         nameInputRef.current.value = props.user.displayName;
+    }
         emailInputRef.current.value = props.user.email;
-      }
+      
   },[props.user])
 
   const clickUpdateHandler = async (event) => {

@@ -8,12 +8,23 @@
   }
   
   .header {
-      border-bottom: 2px solid black;
+    flex-direction: row; 
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-style: italic;
+    margin-right: 1rem;
+    margin-left: 1rem;
   }
+  .headerDetail {
+    display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between !important;
+    }
+    .headerDetail span {
+        margin-left: 55rem;
+    }
   
   .incomplete {
     font-style: italic;

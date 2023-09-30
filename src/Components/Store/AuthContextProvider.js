@@ -20,7 +20,9 @@ const AuthContextProvider = (props) => {
   };
 
   const logoutHandler = () => {
-
+    setToken(null);
+    setUserEmail(null);
+    localStorage.removeItem('user');
   };
 
 
