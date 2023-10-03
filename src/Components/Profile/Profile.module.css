@@ -1,34 +1,16 @@
-.proCon {
-    padding: 0.5rem;
-  
+.heading {
+    text-align: center;
   }
-  
-  .proCon p {
-    align-items: flex-start;
-  }
-  
-  .header {
-    flex-direction: row; 
+  .form {
+    width: 320px;
     display: flex;
+    flex-direction: column;
+    align-content: center;
+  }
+  .mainForm {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    font-style: italic;
-    margin-right: 1rem;
-    margin-left: 1rem;
-  }
-  .headerDetail {
-    display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between !important;
-    }
-    .headerDetail span {
-        margin-left: 55rem;
-    }
-  
-  .incomplete {
-    font-style: italic;
-    background-color: rgba(214, 119, 63, 0.4);
-    border-radius: 15px;
-    padding: 0.25rem;
+    margin-top: 30px;
+    justify-content: center;
   }

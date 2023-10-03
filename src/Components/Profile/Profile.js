@@ -1,73 +1,85 @@
-import React, { Fragment, useState,useContext } from "react";
-import { Link,useNavigate } from "react-router-dom";
-import AuthContext from "../Store/auth-context";
-import { Button } from "react-bootstrap";
-
-
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import classes from "./Profile.module.css";
-import UpdateProfileForm from "./UpdateProfileForm";
+import { useContext, useState } from "react";
+import CreateContext from "../Store/create-context";
+function ProfileComplete() {
+  const [name, setname] = useState("");
+  const [url, seturl] = useState("");
+  const createcontext = useContext(CreateContext);
 
-const Profile = (props) => {
-  const [updateVisible, setUpdateVisible] = useState(false);
-  const authCtx = useContext(AuthContext);
-  const [userData, setUserData] = useState(null)
-  const navigate = useNavigate()
-
-  const updateVisibleHandler = async() => {
-    setUpdateVisible(true);
-
-    try {
-        const res = await fetch(
-          "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCvG0m1K0tSlHR6AVIxny788s0PKVOgmKQ",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              idToken: authCtx.token,
-            }),
-          }
-        );
-        const data = await res.json();
-        setUserData(data.users[0]);
-  
-      } catch (error) {
-        alert(error);
+  function ProfileCompleteFun(e) {
+    e.preventDefault();
+    if (name.length > 0 && url.length > 0) {
+      CallUpdateProfile();
+    }
+  }
+  async function CallUpdateProfile() {
+    let response = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDobfUCPDIraKRAx9neLhvCx2BR1c76nSI",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          idToken: createcontext.token,
+          displayName: name,
+          photoUrl: url,
+          returnSecureToken: false,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    };
-    const clickLogoutHandler = () => {
-        authCtx.logout();
-        navigate('/',{replace: true});
-    
-      };
-    
-  
+    );
+    if (response.ok) {
+      let data = await response.json();
+      console.log(data);
+    } else {
+      let data = await response.json();
+      console.log(data);
+    }
+  }
   return (
-    <Fragment>
-    <section className={classes.proCon}>
-      <div className={classes.header}>
-        <div className={classes.headerDetail}>
-          <p>Welcome to Expense tracker</p>
-          <span className={classes.incomplete}>
-            {!updateVisible ? (
-              "Your Profile is incomplete. "
-            ) : (
-              <React.Fragment>
-                Your profile <strong>x%</strong> completed.
-              </React.Fragment>
-            )}
-            <Link onClick={updateVisibleHandler}>Complete now</Link>
-          </span>
-        </div>
-        <div>
-          <Button variant="danger" onClick={clickLogoutHandler}>Log out</Button>
-        </div>
-      </div>
-    </section>
-    {updateVisible && <UpdateProfileForm user={userData} />}
-  </Fragment>
-  );
-};
+    <>
+      <h2 className={classes.heading}>Profile Complete</h2>
+      <div className={classes.mainForm}>
+        <Form className={classes.form} onSubmit={ProfileCompleteFun}>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Full Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter name"
+              value={
+                createcontext.name !== undefined ? createcontext.name : name
+              }
+              onChange={(e) => {
+                setname(e.target.value);
+              }}
+            />
+          </Form.Group>
 
-export default Profile;
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Profile URL</Form.Label>
+            <Form.Control
+              type="url"
+              placeholder="Enter url"
+              value={
+                createcontext.photourl !== undefined
+                  ? createcontext.photourl
+                  : url
+              }
+              onChange={(e) => {
+                seturl(e.target.value);
+              }}
+            />
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </div>
+    </>
+  );
+}
+
+export default ProfileComplete;

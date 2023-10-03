@@ -1,4 +1,18 @@
-.auth {
+.heading {
+    text-align: center;
+  }
+  .flexItems {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .form {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+  }
+  .signup {
     margin: 3rem auto;
     /* width: 95%; */
     margin-top: 8rem;
@@ -10,9 +24,4 @@
     text-align: center;
     color: rgb(20, 19, 19);
     font-family: Arial, Helvetica, sans-serif;
-}
-
-.switchCon button {
-    border: none;
-    background: none;
 }
