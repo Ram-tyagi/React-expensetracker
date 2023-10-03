@@ -77,6 +77,7 @@ const ContextProvider = (props) => {
           getProfileApi();
         }
     }, [isLoggedIn, token]);
+    
 
     useEffect(() => {
       async function getExpensedata() {
@@ -125,6 +126,52 @@ const ContextProvider = (props) => {
         console.log("Error:" + response.data);
       }
     }
+    async function deleteExpenseHandler(id) {
+        let copyexpensedata = [...expensedata];
+        copyexpensedata = copyexpensedata.filter((val) => {
+          return val.id !== id;
+        });
+        setexpensedata(copyexpensedata);
+        let response = await axios.delete(
+            `https://expensetrackerdatabase-581fe-default-rtdb.firebaseio.com/expense/${id}.json`
+          );
+          if (response.status === 200) {
+            alert("successfully deleted");
+          } else {
+            console.log("Error", response.data);
+          }
+        }
+      
+        async function editExpenseHandler(spend, description, catogary, id) {
+          let copyexpensedata = [...expensedata];
+          let expenseIndex = copyexpensedata.findIndex((val) => {
+            return val.id === id;
+          });
+      
+          copyexpensedata[expenseIndex].spend = spend;
+          copyexpensedata[expenseIndex].description = description;
+          copyexpensedata[expenseIndex].catogary = catogary;
+          setexpensedata(copyexpensedata);
+      
+          let response = await axios.put(
+            `https://expensetrackerdatabase-581fe-default-rtdb.firebaseio.com/expense/${id}.json`,
+            {
+              spend,
+              description,
+              catogary,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (response.status === 200) {
+            console.log(response.data);
+          } else {
+            console.log("Error", response.data);
+          }
+        }
     
       const createcontext = {
         token: token,
@@ -134,6 +181,8 @@ const ContextProvider = (props) => {
         photourl: photourl,
         expensedata: expensedata,
         addExpnse: addExpnseHandler,
+        deleteExpense: deleteExpenseHandler,
+        editExpense: editExpenseHandler,
         setToken: setTokenHandler,
         setTokenout: setTokenoutHandler,
       }

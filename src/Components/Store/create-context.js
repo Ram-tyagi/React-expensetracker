@@ -7,6 +7,8 @@ const CreateContext = React.createContext({
   photourl: "",
   expensedata: [],
   addExpnse: (item) => {},
+  deleteExpense: (id) => {},
+  editExpense: (items) => {},
   setToken: (token) => {},
   setTokenout: () => {},
 });

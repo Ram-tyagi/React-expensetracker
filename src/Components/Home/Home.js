@@ -45,6 +45,11 @@ const Home = () => {
         e.preventDefault();
         createcontext.addExpnse(spend, description, catogary);
       }
+      function itemshowonForm(item) {
+        setspend(item.spend);
+        setdescription(item.description);
+        setcatogary(item.catogary);
+      }
   return (
     <>
        {err && <Alert variant="success">User is Varified now</Alert>}
@@ -114,10 +119,37 @@ const Home = () => {
   <h2>Your Expence</h2>
 </div>
 {createcontext.expensedata.map((item) => (
-        <div key={item.id}>
-    <p>Money: {item.spend}</p>
-    <p>Description: {item.description}</p>
-    <p>Catogary:{item.catogary}</p>
+         <div key={item.id} className="m-2">
+              <p>Money: {item.spend}</p>
+          <p>Description: {item.description}</p>
+          <p>Catogary:{item.catogary}</p>
+     <Button
+            variant="danger"
+            onClick={() => {
+              createcontext.deleteExpense(item.id);
+            }}
+            className="m-2"
+          >
+            Delete
+          </Button>
+          <Button
+            variant="success"
+            onClick={() => {
+              itemshowonForm(item);
+            }}
+            className="m-2"
+          >
+            Edit
+          </Button>
+          <Button
+            variant="success"
+            onClick={() => {
+              createcontext.editExpense(spend, description, catogary, item.id);
+            }}
+            className="m-2"
+          >
+            Edit form data
+          </Button>
   </div>
 ))}
     </>
