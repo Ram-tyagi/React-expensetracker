@@ -1,5 +1,6 @@
 import { useEffect,useState } from "react";
 import CreateContext from "./create-context";
+import axios from "axios";
 const ContextProvider = (props) => {
     function getItemsFromLocalstorage() {
         let items = localStorage.getItem("token");
@@ -29,6 +30,7 @@ const ContextProvider = (props) => {
       const [email, setemail] = useState(getEmail);
       const [name, setname] = useState("");
       const [photourl, setphotourl] = useState("");
+      const [expensedata, setexpensedata] = useState([]);
       const isLoggedIn = !!token;
     
       function setTokenHandler(tok, mail) {
@@ -74,7 +76,55 @@ const ContextProvider = (props) => {
         if (isLoggedIn) {
           getProfileApi();
         }
-      }, [token]);
+    }, [isLoggedIn, token]);
+
+    useEffect(() => {
+      async function getExpensedata() {
+        let response = await axios.get(
+          "https://expensetrackerdatabase-581fe-default-rtdb.firebaseio.com/expense.json"
+        );
+        if (response.status === 200) {
+          response = response.data;
+          let expensearr = [];
+          for (const key in response) {
+            expensearr.push({
+              id: key,
+              catogary: response[key].catogary,
+              description: response[key].description,
+              spend: response[key].spend,
+            });
+          }
+          setexpensedata(expensearr);
+        } else {
+          console.log("err", response);
+        }
+      }
+      getExpensedata();
+    }, []);
+  
+    async function addExpnseHandler(spend, description, catogary) {
+      let response = await axios.post(
+        "https://expensetrackerdatabase-581fe-default-rtdb.firebaseio.com/expense.json",
+        {
+          spend,
+          description,
+          catogary,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        let dataArr = { catogary, description, spend, id: response.data.name };
+        setexpensedata((prev) => {
+          return [...prev, dataArr];
+        });
+      } else {
+        console.log("Error:" + response.data);
+      }
+    }
     
       const createcontext = {
         token: token,
@@ -82,6 +132,8 @@ const ContextProvider = (props) => {
         name: name,
         email: email,
         photourl: photourl,
+        expensedata: expensedata,
+        addExpnse: addExpnseHandler,
         setToken: setTokenHandler,
         setTokenout: setTokenoutHandler,
       }

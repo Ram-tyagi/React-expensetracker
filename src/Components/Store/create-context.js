@@ -5,6 +5,8 @@ const CreateContext = React.createContext({
   email: "",
   name: "",
   photourl: "",
+  expensedata: [],
+  addExpnse: (item) => {},
   setToken: (token) => {},
   setTokenout: () => {},
 });
