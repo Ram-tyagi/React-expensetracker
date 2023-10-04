@@ -1,15 +1,16 @@
 import NavbarFun from "./Components/Navbar/Navbar";
-import { useContext } from "react";
+
 import Signup from "./Components/Signup/Signup";
 import {  Routes, Route } from "react-router-dom";
 import Home from "./Components/Home/Home";
 import ProfileComplete from "./Components/Profile/Profile";
-import CreateContext from "./Components/Store/create-context";
+
 import ForgetPassword from "./Components/ForgetPassword/ForgetPassword";
+import { useSelector } from "react-redux";
 
 function App() {
-  const createcontext = useContext(CreateContext);
-  let isLoggedIn = createcontext.isLoggedIn;
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
   return (
     <div>
             <NavbarFun />

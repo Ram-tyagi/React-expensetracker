@@ -1,12 +1,12 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import classes from "./Profile.module.css";
-import { useContext, useState } from "react";
-import CreateContext from "../Store/create-context";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 function ProfileComplete() {
   const [name, setname] = useState("");
   const [url, seturl] = useState("");
-  const createcontext = useContext(CreateContext);
+  const token = useSelector((state) => state.auth.token);
 
   function ProfileCompleteFun(e) {
     e.preventDefault();
@@ -16,11 +16,11 @@ function ProfileComplete() {
   }
   async function CallUpdateProfile() {
     let response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDobfUCPDIraKRAx9neLhvCx2BR1c76nSI",
+      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCvG0m1K0tSlHR6AVIxny788s0PKVOgmKQ",
       {
         method: "POST",
         body: JSON.stringify({
-          idToken: createcontext.token,
+          idToken: token,
           displayName: name,
           photoUrl: url,
           returnSecureToken: false,
@@ -48,10 +48,8 @@ function ProfileComplete() {
             <Form.Control
               type="text"
               placeholder="Enter name"
-              value={
-                createcontext.name !== undefined ? createcontext.name : name
-              }
-              onChange={(e) => {
+              value={name}
+               onChange={(e) => {
                 setname(e.target.value);
               }}
             />
@@ -62,11 +60,7 @@ function ProfileComplete() {
             <Form.Control
               type="url"
               placeholder="Enter url"
-              value={
-                createcontext.photourl !== undefined
-                  ? createcontext.photourl
-                  : url
-              }
+              value={url}
               onChange={(e) => {
                 seturl(e.target.value);
               }}

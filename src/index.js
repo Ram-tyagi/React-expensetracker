@@ -6,17 +6,18 @@ import "../node_modules/bootstrap/dist/css/bootstrap.css";
 
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
-import ContextProvider from './Components/Store/ContextProvider';
-
-
-
+import { Provider } from "react-redux";
+import store from './Components/ReduxStore/Store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <ContextProvider>
+  <Provider store={store}>
+ 
+
   <BrowserRouter>
     <App />
   </BrowserRouter>
-  </ContextProvider>
+  </Provider>
+  
 );
 
 // If you want to start measuring performance in your app, pass a function
