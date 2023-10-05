@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-const initialAuthState = {
+const initialexpenseState = {
   data: [],
 };
 
 const expensedataSlice = createSlice({
   name: "expensedata",
-  initialState: initialAuthState,
+  initialState: initialexpenseState,
   reducers: {
     manipulateData(state, action) {
      

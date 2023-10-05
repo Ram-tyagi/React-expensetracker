@@ -4,9 +4,11 @@ import classes from "./ForgetPassword.module.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 function ForgetPassword() {
   const [mail, setmail] = useState("");
   const [loader, setloader] = useState(false);
+  const toggle = useSelector((state) => state.theme.toggle);
   async function ForgetPasswordFun() {
     setloader(true);
     let response = await axios.post(
@@ -29,34 +31,40 @@ function ForgetPassword() {
     setloader(false);
   }
   return (
-    <div className={classes.section}>
-      <h2 className={classes.heading}>
-        Enter the email from that you are registered{" "}
-      </h2>
-      <div className={classes.form}>
-        <Form>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              value={mail}
-              onChange={(e) => {
-                setmail(e.target.value);
-              }}
-            />
-          </Form.Group>
+    <div id={toggle ? "dark" : ""}>
+      <div className={classes.section}>
+        <h2 className={classes.heading}>
+          Enter the email from that you are registered{" "}
+        </h2>
+        <div className={classes.form}>
+          <Form>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={mail}
+                onChange={(e) => {
+                  setmail(e.target.value);
+                }}
+              />
+            </Form.Group>
 
-          {loader ? (
-            <p>loading data...</p>
-          ) : (
-            <Button variant="primary" type="submit" onClick={ForgetPasswordFun}>
-              Send Link
-            </Button>
-          )}
-        </Form>
+            {loader ? (
+              <p>loading data...</p>
+            ) : (
+              <Button
+                variant="primary"
+                type="submit"
+                onClick={ForgetPasswordFun}
+              >
+                Send Link
+              </Button>
+            )}
+          </Form>
+        </div>
+        <Link to={"/login"}>Already a user login? Login</Link>
       </div>
-      <Link to={"/login"}>Already a user login? Login</Link>
     </div>
   );
 }

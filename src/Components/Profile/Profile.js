@@ -40,37 +40,40 @@ function ProfileComplete() {
   }
   return (
     <>
-      <h2 className={classes.heading}>Profile Complete</h2>
-      <div className={classes.mainForm}>
-        <Form className={classes.form} onSubmit={ProfileCompleteFun}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Full Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter name"
-              value={name}
-               onChange={(e) => {
-                setname(e.target.value);
-              }}
-            />
-          </Form.Group>
+         <div id={token ? "dark" : ""}>
+        <h2 className={classes.heading}>Profile Complete</h2>
+        <div className={classes.mainForm}>
+          <Form className={classes.form} onSubmit={ProfileCompleteFun}>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Full Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter name"
+                value={name}
+                onChange={(e) => {
+                  setname(e.target.value);
+                }}
+              />
+            </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Profile URL</Form.Label>
-            <Form.Control
-              type="url"
-              placeholder="Enter url"
-              value={url}
-              onChange={(e) => {
-                seturl(e.target.value);
-              }}
-            />
-          </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Profile URL</Form.Label>
+              <Form.Control
+                type="url"
+                placeholder="Enter url"
+                value={url}
+                onChange={(e) => {
+                  seturl(e.target.value);
+                }}
+              />
+            </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
+         
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
+        </div>
       </div>
     </>
   );
